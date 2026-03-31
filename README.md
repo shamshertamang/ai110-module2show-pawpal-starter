@@ -32,6 +32,33 @@ PawPal+ goes beyond basic task lists with several scheduling enhancements:
 - **Conflict detection** — the scheduler warns when two tasks are assigned to the same time slot, surfaced in the schedule explanation rather than crashing.
 - **Recurring tasks** — tasks marked as `"daily"` or `"weekly"` automatically spawn a new instance with an updated `due_date` when completed, using Python's `timedelta`.
 
+## Testing PawPal+
+
+### Running Tests
+
+```bash
+python -m pytest tests/test_pawpal.py -v
+```
+
+### What the Tests Cover
+
+The test suite contains **23 tests** organized into 5 behavior groups:
+
+| Group | Tests | What It Verifies |
+|-------|-------|------------------|
+| **Recurrence Logic** | 5 | Daily tasks create a next-day task, weekly shifts by 7 days, non-recurring returns `None`, `due_date=None` falls back to today |
+| **Sorting Correctness** | 5 | Tasks scheduled in priority order (HIGH > MEDIUM > LOW), preferred names break ties, earlier times break remaining ties, empty/oversized inputs handled |
+| **Conflict Detection** | 3 | Duplicate time slots produce a warning, distinct times produce none, empty schedule is clean |
+| **Task Filtering** | 5 | Filter by pet name, completion status, or both; nonexistent pet and no-pets edge cases return `[]` |
+| **Completed Tasks Skipped** | 3 | Completed tasks excluded from schedule, explanation notes the skip, all-completed yields empty schedule |
+| **Basic Operations** | 2 | `mark_complete()` flips status, tasks can be added to a pet |
+
+### Confidence Level
+
+**Confidence: 4/5 stars**
+
+All 23 tests pass across happy paths and edge cases for every core behavior. The one star withheld is because the test suite does not yet cover duration-based time overlap (only exact hour matches are detected) or integration testing with the Streamlit UI layer.
+
 ## Getting started
 
 ### Setup
