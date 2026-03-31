@@ -1,0 +1,55 @@
+@startuml PawPal+
+
+class Owner {
+    owner_id: int
+    name: String
+    email: String
+    phone_number: String
+    available_time: int
+    favorite_pets: List<Pet>
+    current_pets: List<Pet>
+    --
+    add_current_pet(pet: Pet): void                              
+    remove_current_pet(pet: Pet): void                    
+    add_favorite_pet(pet: Pet): void                      
+    remove_favorite_pet(pet: Pet): void                   
+    change_email(new_email: String): void 
+}
+
+class Pet {
+    pet_id: int
+    name: String
+    owner_id: int
+    species: String
+    dietary_preferences: List<String>
+    --
+    change_owner(owner_id: int): void
+}
+
+class Task {
+    task_id: int
+    task_name: String
+    is_completed: boolean
+    duration: int
+    time: int
+    priority: enum {HIGH, MEDIUM, LOW}
+    --
+    mark_complete(): void
+}
+
+
+class Schedule {
+    schedule: SortedList<Task>  ' sorted by priority
+    total_time: int
+    --
+    generate_schedule(tasks: List<Task>, available_time: int): Schedule
+    get_tasks(): List<Task>
+}
+
+Owner "1" --o "*" Pet : owns
+Owner "1" --o "1" Schedule : has                                                                          
+Pet "1" --o "*" Task : has                                                                            
+Schedule "1" --o "*" Task : contains 
+
+
+@enduml

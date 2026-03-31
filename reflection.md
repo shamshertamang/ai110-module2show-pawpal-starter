@@ -4,8 +4,15 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+The initial UML design includes four classes: Owner, Pet, Task, and Schedule.
+
+- **Owner** represents the pet owner and stores their contact info, available time for daily pet care, and lists of current and favorite pets. It provides methods to manage pets and update contact details.
+- **Pet** represents an individual pet with a species and dietary preferences, linked to its owner.
+- **Task** represents a single pet care activity (e.g., walking, feeding, grooming) with a duration, time, priority level (HIGH, MEDIUM, LOW), and completion status.
+- **Schedule** holds a priority-sorted list of tasks and a total time tracker. Its core responsibility is generating a daily plan via `generate_schedule()`, which takes a list of tasks and the owner's available time, then produces an optimized schedule that fits within the time constraint.
+
+The relationships are: an Owner owns many Pets (1-to-many), a Pet has many Tasks (1-to-many), an Owner has one Schedule (1-to-1), and a Schedule contains many Tasks (1-to-many).
+
 
 **b. Design changes**
 
@@ -33,6 +40,7 @@
 **a. How you used AI**
 
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
+Design brainstorming, making plantUML, install VSCode extensions
 - What kinds of prompts or questions were most helpful?
 
 **b. Judgment and verification**
