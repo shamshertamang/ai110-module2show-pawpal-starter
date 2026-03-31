@@ -1,5 +1,11 @@
 @startuml PawPal+
 
+enum Priority {
+    HIGH
+    MEDIUM
+    LOW
+}
+
 class Owner {
     owner_id: int
     name: String
@@ -10,11 +16,13 @@ class Owner {
     favorite_pets: List<Pet>
     current_pets: List<Pet>
     --
-    add_current_pet(pet: Pet): void                              
-    remove_current_pet(pet: Pet): void                    
-    add_favorite_pet(pet: Pet): void                      
-    remove_favorite_pet(pet: Pet): void                   
-    change_email(new_email: String): void 
+    add_current_pet(pet: Pet): void
+    remove_current_pet(pet: Pet): void
+    add_favorite_pet(pet: Pet): void
+    remove_favorite_pet(pet: Pet): void
+    change_email(new_email: String): void
+    get_all_tasks(): List<Task>
+    filter_tasks(pet_name: String, completed: bool): List<Task>
 }
 
 class Pet {
@@ -26,6 +34,7 @@ class Pet {
     tasks: List<Task>
     --
     change_owner(owner_id: int): void
+    complete_task(task: Task): Task | None
 }
 
 class Task {
@@ -34,27 +43,30 @@ class Task {
     is_completed: boolean
     duration: int
     time: int
-    priority: enum {HIGH, MEDIUM, LOW}
+    priority: Priority
+    pet_id: int
+    recurrence: String
+    due_date: date
     --
-    mark_complete(): void
+    mark_complete(): Task | None
     edit_task(task_name: String, duration: int, time: int, priority: Priority): void
 }
 
-
 class Schedule {
-    schedule: SortedList<Task>  ' sorted by priority
+    schedule: List<Task>
     total_time: int
     explanation: String
     --
     generate_schedule(tasks: List<Task>, available_time: int, preferred_tasks: List<String>): Schedule
+    _detect_conflicts(): List<String>
     get_tasks(): List<Task>
     get_explanation(): String
 }
 
 Owner "1" --o "*" Pet : owns
-Owner "1" --o "1" Schedule : has                                                                          
-Pet "1" --o "*" Task : has                                                                            
-Schedule "1" --o "*" Task : contains 
-
+Owner "1" --o "1" Schedule : has
+Pet "1" --o "*" Task : has
+Schedule "1" --o "*" Task : contains
+Task --> Priority : uses
 
 @enduml
