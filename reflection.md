@@ -32,13 +32,19 @@ The design changed in three ways after comparing the UML diagram against the REA
 
 **a. Constraints and priorities**
 
-- What constraints does your scheduler consider (for example: time, priority, preferences)?
-- How did you decide which constraints mattered most?
+The scheduler considers three constraints, applied in this order:
+
+1. **Priority** (HIGH > MEDIUM > LOW) — the primary sort key. High-priority tasks like medication or feeding are scheduled first because missing them has the biggest impact on pet health.
+2. **Owner preferences** — a tiebreaker within the same priority level. If two tasks are both HIGH priority, the one matching the owner's `preferred_tasks` list comes first.
+3. **Time of day** — the final tiebreaker. Within the same priority and preference tier, earlier tasks (lower `time` value) are scheduled first so the plan follows a natural morning-to-evening flow.
+
+Priority was ranked highest because a pet care app must ensure critical tasks (meds, feeding) always make the cut before optional ones (enrichment, grooming) when time is limited.
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+The conflict detector only checks for **exact time-slot matches** (two tasks at the same hour) rather than checking whether task durations actually overlap. For example, a 45-minute walk at 8:00 and a 10-minute feeding at 8:30 would not be flagged, even though they overlap by 15 minutes.
+
+This tradeoff is reasonable because PawPal+ models time as a simple hour integer (`time=8` means "8:00"), not as a precise start/end window. Implementing true duration-based overlap detection would require changing `Task.time` from an hour to a minute-level timestamp and adding an end-time calculation — added complexity that isn't justified for a daily pet care planner where tasks are approximate and flexible. The exact-match approach catches the most common conflict (two tasks carelessly assigned to the same hour) while keeping the code simple and the data model lightweight.
 
 ---
 
