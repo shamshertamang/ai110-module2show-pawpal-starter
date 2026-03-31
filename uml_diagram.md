@@ -7,6 +7,7 @@ classDiagram
         String email
         String phone_number
         int available_time
+        List~String~ preferred_tasks
         List~Pet~ favorite_pets
         List~Pet~ current_pets
         add_current_pet(pet: Pet) void
@@ -22,6 +23,7 @@ classDiagram
         int owner_id
         String species
         List~String~ dietary_preferences
+        List~Task~ tasks
         change_owner(owner_id: int) void
     }
 
@@ -33,13 +35,16 @@ classDiagram
         int time
         enum priority HIGH, MEDIUM, LOW
         mark_complete() void
+        edit_task(task_name: String, duration: int, time: int, priority: Priority) void
     }
 
     class Schedule {
         SortedList~Task~ schedule
         int total_time
-        generate_schedule(tasks: List~Task~, available_time: int) Schedule
+        String explanation
+        generate_schedule(tasks: List~Task~, available_time: int, preferred_tasks: List~String~) Schedule
         get_tasks() List~Task~
+        get_explanation() String
     }
 
     Owner "1" --o "*" Pet : owns

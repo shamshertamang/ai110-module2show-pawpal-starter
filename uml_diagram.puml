@@ -6,6 +6,7 @@ class Owner {
     email: String
     phone_number: String
     available_time: int
+    preferred_tasks: List<String>
     favorite_pets: List<Pet>
     current_pets: List<Pet>
     --
@@ -22,6 +23,7 @@ class Pet {
     owner_id: int
     species: String
     dietary_preferences: List<String>
+    tasks: List<Task>
     --
     change_owner(owner_id: int): void
 }
@@ -35,15 +37,18 @@ class Task {
     priority: enum {HIGH, MEDIUM, LOW}
     --
     mark_complete(): void
+    edit_task(task_name: String, duration: int, time: int, priority: Priority): void
 }
 
 
 class Schedule {
     schedule: SortedList<Task>  ' sorted by priority
     total_time: int
+    explanation: String
     --
-    generate_schedule(tasks: List<Task>, available_time: int): Schedule
+    generate_schedule(tasks: List<Task>, available_time: int, preferred_tasks: List<String>): Schedule
     get_tasks(): List<Task>
+    get_explanation(): String
 }
 
 Owner "1" --o "*" Pet : owns

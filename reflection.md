@@ -16,8 +16,15 @@ The relationships are: an Owner owns many Pets (1-to-many), a Pet has many Tasks
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+The design changed in three ways after comparing the UML diagram against the README requirements:
+
+1. **Added `explanation` to Schedule** — The README requires the app to explain why it chose a particular plan. The original design had no way to capture this reasoning, so we added an `explanation` attribute and a `get_explanation()` method to `Schedule` so the scheduler can describe its decisions to the user.
+
+2. **Added `edit_task()` to Task** — The README says users should be able to add *and edit* tasks, but the original design only supported marking tasks complete. We added an `edit_task()` method so users can update a task's name, duration, time, and priority after creation.
+
+3. **Added `preferred_tasks` to Owner and `generate_schedule()`** — The README lists "owner preferences" as a scheduling constraint, but the original design only considered time and priority. We added a `preferred_tasks` list to `Owner` (e.g., "walking", "enrichment") and passed it into `generate_schedule()` so preferred task types are used as a tiebreaker when tasks share the same priority level.
+
+4. **Added `tasks` list to Pet** — The UML shows a 1-to-many relationship between Pet and Task (`Pet "1" --o "*" Task`), but the original skeleton only stored a `pet_id` back-reference on Task with no way to navigate from Pet to its Tasks. We added a `tasks: list[Task]` attribute to `Pet` so the scheduler can collect all tasks by iterating through the owner's pets, making the relationship navigable from both sides.
 
 ---
 
